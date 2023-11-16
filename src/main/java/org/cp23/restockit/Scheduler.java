@@ -6,10 +6,12 @@
 package org.cp23.restockit;
 
 import java.util.HashMap;
-import org.bukkit.Material;
+
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 
 final class Scheduler {
     
@@ -89,7 +91,7 @@ final class Scheduler {
         @Override
         public void run() {
             //If no sign is there, stop (the player may have removed it mid-count)
-            if (block.getType() != Material.WALL_SIGN && block.getType() != Material.SIGN_POST) {
+            if (!block.getType().toString().toLowerCase().contains("sign")) {
                 Scheduler.stopSchedule(block);
                 RestockIt.debugSched("Sign removed, cancelling schedule at " + getCoords(block));
                 return;
@@ -98,8 +100,8 @@ final class Scheduler {
             // We know the object is a sign.
             Sign sign = (Sign)block.getState();
             Block cont = ContUtils.getContFromSign(sign);
-            String line2 = sign.getLine(2);
-            String line3 = sign.getLine(3);
+            String line2 = sign.getSide(Side.FRONT).getLine(2);
+            String line3 = sign.getSide(Side.FRONT).getLine(3);
 
             if(ContUtils.getCurrentItems(SignUtils.getMaterial(line2), cont) >= SignUtils.getMaxItems(line3, SignUtils.getMaterial(line2))) {
                 RestockIt.debugSched("Container is full at " + getCoords(block));
@@ -112,9 +114,9 @@ final class Scheduler {
             
             // If the damage parameter is set
             Short damage = SignUtils.getDamage(line2);
-            if (damage >= 0) {
+            if (damage >= 0 && stack instanceof Damageable) {
                 // Set the damage of the item.
-                stack.setDurability(damage);
+                ((Damageable)stack).setDamage(damage);
             }
             
             // Add item

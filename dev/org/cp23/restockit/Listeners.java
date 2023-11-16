@@ -166,7 +166,7 @@ public class Listeners implements Listener {
             inv.clear(); //Stops chests bursting everywhere when broken
             RestockIt.debug("Chest emptied");
         }
-        else if(mat == Material.WALL_SIGN|| mat == Material.SIGN_POST) {
+        else if(mat.toString().toLowerCase().contains("sign")) {
             Block sign = block;
             String line = ((Sign)sign.getState()).getLine(1);
             

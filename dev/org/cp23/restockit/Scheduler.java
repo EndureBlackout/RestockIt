@@ -23,7 +23,7 @@ class Scheduler extends RestockIt {
                 @Override
                 public void run() {
                     //If no sign is there, stop (the player may have removed it mid-count)
-                    if (block.getType() != Material.WALL_SIGN && block.getType() != Material.SIGN_POST) {
+                    if (!block.getType().toString().contains("sign")) {
                         Scheduler.stopSchedule(block);
                         plugin.debugSched("Sign removed, cancelling schedule at " + getCoords(block));
                         return;

@@ -1,5 +1,6 @@
 name: RestockIt
 main: org.cp23.restockit.RestockIt
+api-version: '1.20'
 version: 1.10-dualspiral1-SNAPSHOT
 softdepend: [Vault, PermissionsEx]
 commands:

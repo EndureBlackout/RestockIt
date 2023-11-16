@@ -7,6 +7,7 @@ package org.cp23.restockit;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 import org.cp23.restockit.enums.ListType;
 import org.cp23.restockit.enums.PermissionEnum;
@@ -42,7 +43,7 @@ class RIperm{
     public RIperm(Block bl, Player pl, Sign sgn, PermissionEnum p){
         block = bl;
         player = pl;
-        line = sgn.getLine(2);
+        line = sgn.getSide(Side.FRONT).getLine(2);
         perm = p;
     }
 

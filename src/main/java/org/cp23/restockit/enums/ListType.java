@@ -5,9 +5,6 @@
 
 package org.cp23.restockit.enums;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Enumeration that defines each config list type.
  */

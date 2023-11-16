@@ -8,9 +8,11 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.cp23.restockit.enums.ListType;
 
 class ContUtils {
@@ -35,9 +37,9 @@ class ContUtils {
     
     public static boolean isSignAboveCont(Block cont) {
         if(RestockIt.isContainer(cont.getType())) {  //Is it a container?
-            Sign sign = SignUtils.getSignAboveCont(cont);
-            if(sign.getType() == Material.WALL_SIGN || sign.getType() == Material.SIGN_POST) { //Is there a sign above?
-                String line = sign.getLine(1);
+            Block sign = SignUtils.getSignAboveCont(cont);
+            if(sign.getType().toString().toLowerCase().contains("sign")) { //Is there a sign above?
+                String line = ((Sign) sign.getState()).getSide(Side.FRONT).getLine(1);
                 if(SignUtils.isRIsign(line)) return true;  //Is it a RestockIt sign?
             }
         }
@@ -46,9 +48,9 @@ class ContUtils {
     
     public static boolean isSignBelowCont(Block cont) {
         if(RestockIt.isContainer(cont.getType())) {
-            Sign sign = SignUtils.getSignBelowCont(cont);
-            if (sign.getType() == Material.WALL_SIGN || sign.getType() == Material.SIGN_POST) { //Is there a sign below
-                String line = sign.getLine(1);
+            Block sign = SignUtils.getSignBelowCont(cont);
+            if(sign.getType().toString().toLowerCase().contains("sign")) { //Is there a sign below?
+                String line = ((Sign) sign.getState()).getSide(Side.FRONT).getLine(1);
                 if(SignUtils.isRIsign(line)) return true;  //Is it a RestockIt sign?
             }
         }
@@ -64,15 +66,15 @@ class ContUtils {
         Block block = sign.getWorld().getBlockAt(sign.getX(), sign.getY()-1, sign.getZ());
         int x = sign.getX(), y = sign.getY(), z = sign.getZ();
         Block posSign = block.getWorld().getBlockAt(x, y-2, z); //Possibly a sign
-        if (RestockIt.isContainer(block.getType()) && (posSign.getType() == Material.WALL_SIGN || posSign.getType() == Material.SIGN_POST)) {
-            return (SignUtils.isRIsign(((Sign)posSign.getState()).getLine(1)));
+        if (RestockIt.isContainer(block.getType()) && (posSign.getType().toString().toLowerCase().contains("sign"))) {
+            return (SignUtils.isRIsign(((Sign)posSign.getState()).getSide(Side.FRONT).getLine(1)));
         }
         
         //Check above the sign
         block = sign.getWorld().getBlockAt(sign.getX(), sign.getY()+1, sign.getZ());
         posSign = block.getWorld().getBlockAt(x, y+2, z); //Possibly a sign
-        if (RestockIt.isContainer(block.getType()) && (posSign.getType() == Material.WALL_SIGN || posSign.getType() == Material.SIGN_POST)) {
-            return(SignUtils.isRIsign(((Sign)posSign.getState()).getLine(1)));
+        if (RestockIt.isContainer(block.getType()) && (posSign.getType().toString().toLowerCase().contains("sign"))) {
+            return(SignUtils.isRIsign(((Sign)posSign.getState()).getSide(Side.FRONT).getLine(1)));
         }
         return false;
     }
@@ -111,7 +113,7 @@ class ContUtils {
             
             int stackSize = mat.getMaxStackSize(); //Get stack size (snowball stack != stone)
             ItemStack stack = new ItemStack(mat, stackSize); //Make the ItemStack
-            if(damage >= 0) stack.setDurability(damage); //Incorporate damage (remember, -1 = no damage value)
+            if(damage >= 0 && stack instanceof Damageable) {((Damageable)stack).setDamage(damage);} //Incorporate damage (remember, -1 = no damage value)
             int stacks = dc!= null ? inv.getSize() / 2 : inv.getSize();  //Get inventory size
             
             for(int x=0; x<stacks; x++) inv.setItem(x, stack);//Fill the chest
@@ -121,12 +123,12 @@ class ContUtils {
                 if(ContUtils.isRICont(dc)){
                     //Prepare stuff for second chest if it's different
                     Sign sign = SignUtils.getSignFromCont(dc);
-                    line = sign.getLine(2);
+                    line = sign.getSide(Side.FRONT).getLine(2);
                     mat = SignUtils.getMaterial(line);
                     damage = SignUtils.getDamage(line);
                     stackSize = mat.getMaxStackSize();
                     stack = new ItemStack(mat, stackSize);
-                    if(damage >= 0) stack.setDurability(damage);
+                    if(damage >= 0) ((Damageable)stack).setDamage(damage);
                 }
                 for(int x=stacks;x<stacks*2; x++) inv.setItem(x, stack); //Fill the other half
             }

@@ -42,9 +42,7 @@ public abstract class RIPermissionManager {
         // * PermissionsEx        
         // * Vault
         // * SuperPerms
-        if (PermissionsExPermissionManager.isAvailable()) {
-            permissionsManager = new PermissionsExPermissionManager();
-        } else if (VaultPermissionManager.isAvailable()) {
+    	if (VaultPermissionManager.isAvailable()) {
             permissionsManager = new VaultPermissionManager();
         } else {
             permissionsManager = new SuperPermsPermissionManager();

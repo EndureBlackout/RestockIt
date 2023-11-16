@@ -6,10 +6,10 @@
 package org.cp23.restockit;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.cp23.restockit.enums.ListType;
@@ -109,11 +109,10 @@ public class RestockIt extends JavaPlugin {
         
         // For each item in the list...
         for(String blItem : list) {
-            
             // If we get an invalid item, warn the user.
-            if(SignUtils.getType(blItem) <= 0) {
+            if(SignUtils.getType(blItem).equals(SignUtils.badDamage) || SignUtils.getType(blItem).equals(SignUtils.notMaterial) || SignUtils.getType(blItem).equals(SignUtils.incinerator)) {
                 RestockIt.plugin.getLogger().warning(String.format("Error in %s: %s not recognised - Ignoring", type.toString(), blItem));
-            } else if (mat.getId() == SignUtils.getType(blItem)) {
+            } else if (mat.toString().equals(SignUtils.getType(blItem))) {
                 // If we get an item in the list, then return.
                 return true;
             }

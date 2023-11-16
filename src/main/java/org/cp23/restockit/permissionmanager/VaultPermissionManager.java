@@ -5,11 +5,13 @@
 
 package org.cp23.restockit.permissionmanager;
 
-import net.milkbowl.vault.Vault;
-import net.milkbowl.vault.permission.Permission;
-import org.bukkit.Bukkit;
+
 import static org.bukkit.Bukkit.getServer;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import net.milkbowl.vault.permission.Permission;
 
 /**
  * Class that implements @link { RIPermissionManager } to use Vault.
@@ -35,7 +37,7 @@ class VaultPermissionManager extends RIPermissionManager {
      */ 
     static boolean isAvailable() {
        return Bukkit.getServer().getPluginManager().isPluginEnabled("Vault") 
-                && Bukkit.getServer().getPluginManager().getPlugin("Vault") instanceof Vault;
+                && Bukkit.getServer().getPluginManager().getPlugin("Vault") != null;
     }
     
     
