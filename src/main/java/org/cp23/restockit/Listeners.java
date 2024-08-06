@@ -200,6 +200,21 @@ class Listeners implements Listener {
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) { // If they right click...
 			Block block = event.getClickedBlock();
 			Block chest = getRestockItChest(block);
+			
+			if(block.getType().toString().toLowerCase().contains("sign")) {
+				Sign sign = (Sign) block.getState();
+				String line = sign.getSide(Side.FRONT).getLine(1);
+				
+				Player p = event.getPlayer();
+				
+				RIperm fPerm = new RIperm(block, p, sign.getSide(Side.FRONT).getLine(2), PermissionEnum.CREATED);
+				RIperm bPerm = new RIperm(block, p, sign.getSide(Side.BACK).getLine(2), PermissionEnum.CREATED);
+				
+				if(SignUtils.isRIsign(line) && !(PlayerUtils.hasPermissions(fPerm) || PlayerUtils.hasPermissions(bPerm))) {
+					PlayerUtils.sendPlayerMessage(p, 2, block.getType().name().toLowerCase());
+				}
+			}
+			
 			if (chest != null) { // And it's a restockit chest...
 				RestockIt.debug("RestockIt container opened");
 				Player player = event.getPlayer();

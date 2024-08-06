@@ -7,6 +7,8 @@ package org.cp23.restockit;
 
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
@@ -107,6 +109,13 @@ final class Scheduler {
                 RestockIt.debugSched("Container is full at " + getCoords(block));
                 //The chest has reached its limit
                 return;
+            }
+
+            if(SignUtils.getMaterial(line2) == null) {
+                sign.getBlock().setType(Material.AIR);
+                Bukkit.getLogger().info("[WARNING] Restock it sign in " + sign.getLocation().getWorld().toString() 
+                    + " at coordinates " + sign.getLocation().getX() + ", " + sign.getLocation().getY() + ", " + sign.getLocation().getZ()
+                    + " was removed because the material was not found. The sign had material of " + line2);
             }
 
             //Add item to chest

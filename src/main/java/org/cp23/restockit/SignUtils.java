@@ -31,6 +31,7 @@ class SignUtils {
 	public static short getDamage(String line) {
 		// Return damage from line, else 0
 		String dmgStr = (line.contains(":") ? line : line + ":0").split(":")[1];
+
 		return Short.parseShort(dmgStr);
 	}
 
@@ -132,7 +133,8 @@ class SignUtils {
 	public static void dropSign(Sign sign) {
 		// Remove the sign and drop one at its location
 		Location loc = sign.getWorld().getBlockAt(sign.getX(), sign.getY(), sign.getZ()).getLocation();
-		sign.setType(Material.AIR);
+		loc.getBlock().setType(Material.AIR);
+		
 		sign.getWorld().dropItem(loc, new ItemStack(Material.OAK_SIGN, 1));
 	}
 
